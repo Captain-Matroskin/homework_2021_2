@@ -30,11 +30,29 @@ QUnit.module('Тестируем функцию set', function () {
 			deep: null
 		};
 
+		const object5 = {
+			foo: null,
+			inside: {
+				bar: null,
+			}
+		}
+		const object6 = {
+			foo: 2,
+			inside: {
+				bar: null,
+			}
+		}
+
 		assert.deepEqual(set({foo: 'bar'}, '.foo', 'baz'), {foo: 'baz'});
 		assert.deepEqual(set(object, '.deep.hested.field', 42), object2);
 
 		assert.deepEqual(set(object, '.deep.hested', {foo: 'bar'}), object3);
 		assert.deepEqual(set(object, '.deep', null), object4);
+
+		assert.deepEqual(set(object5, ".foo", 2), object6);
+
+		assert.deepEqual(set(object5, ".....foo", 2), object6);  // работает с лишними точками
+		assert.deepEqual(set(object5, "foo", 2), object6);  // нет точки в начале
 	});
 
 	QUnit.test('set изменяет переданный объект', function (assert) {
@@ -94,5 +112,13 @@ QUnit.module('Тестируем функцию set', function () {
 		};
 
 		assert.deepEqual(set({}, '.deep.nested.field', null), object);
+	});
+
+	QUnit.test('set обрабатывает ошибки неправильно переданных аргументов типов данных', function (assert) {
+
+		assert.deepEqual(set(undefined, '.deep', null), undefined);
+		assert.deepEqual(set({}, null, 2), undefined);
+		assert.deepEqual(set(NaN, null, 2), undefined);
+
 	});
 });
