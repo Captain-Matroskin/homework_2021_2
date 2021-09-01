@@ -1,15 +1,23 @@
 'use strict';
 
-let set = (object, key, data) => {
-    if (typeof key !== "string" || typeof object !== "object") {
-        return undefined;
+/**
+ * Функция, которая получает путь к вложенному свойству объекта и устанавливает значени в это свойство
+ * @param object
+ * @param key
+ * @param data
+ * @returns {*}
+ */
+
+const set = (object, key, data) => {
+    if (typeof key !== 'string' || typeof object !== 'object') {
+        return;
     }
 
     const arrKey = key.split('.');
-    let lengthKey = arrKey.length;
+    const lengthKey = arrKey.length;
     let nestingObject = object;
 
-    arrKey.forEach ((item, length) => {
+    arrKey.forEach ((item, index) => {
         if (!item.length) {
             return;
         }
@@ -17,7 +25,7 @@ let set = (object, key, data) => {
        if ( !(item in nestingObject) ) {
            nestingObject[item] = {};
        }
-       if (length < lengthKey - 1) {
+       if (index < lengthKey - 1) {
            nestingObject = nestingObject[item];
        }
     });
